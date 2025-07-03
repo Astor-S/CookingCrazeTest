@@ -1,121 +1,92 @@
-using UnityEngine;
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using UnityEngine;
 using Random = UnityEngine.Random;
-
 using CookingPrototype.Kitchen;
 
 namespace CookingPrototype.Controllers {
 	public class CustomersController : MonoBehaviour {
+		private const string CUSTOMER_PREFABS_PATH = "Prefabs/Customer";
+
+		[SerializeField] private List<CustomerPlace> _customerPlaces = null;
+		[SerializeField] private int _customersTargetNumber = 15;
+		[SerializeField] private float CustomerWaitTime = 18f;
+		[SerializeField] private float CustomerSpawnTime = 3f;
+
+		private Stack<List<Order>> _orderSets;
+		private float _timer = 0f;
 
 		public static CustomersController Instance { get; private set; }
-
-		public int                 CustomersTargetNumber = 15;
-		public float               CustomerWaitTime      = 18f;
-		public float               CustomerSpawnTime     = 3f;
-		public List<CustomerPlace> CustomerPlaces        = null;
 
 		[HideInInspector]
 		public int TotalCustomersGenerated { get; private set; } = 0;
 
 		public event Action TotalCustomersGeneratedChanged;
 
-		const string CUSTOMER_PREFABS_PATH = "Prefabs/Customer";
+		public bool IsComplete =>
+			TotalCustomersGenerated >= _customersTargetNumber && _customerPlaces.All(places => places.IsFree);
 
-		float _timer = 0f;
-		Stack<List<Order>> _orderSets;
+		private bool HasFreePlaces =>
+			_customerPlaces.Any(places => places.IsFree);
 
-		bool HasFreePlaces {
-			get { return CustomerPlaces.Any(x => x.IsFree); }
-		}
-
-		public bool IsComplete {
-			get {
-				return TotalCustomersGenerated >= CustomersTargetNumber && CustomerPlaces.All(x => x.IsFree);
-			}
-		}
-
-		void Awake() {
-			if ( Instance != null ) {
+		private void Awake()
+		{
+			if ( Instance != null )
 				Debug.LogError("Another instance of CustomersController already exists!");
-			}
+
 			Instance = this;
 		}
 
-		void OnDestroy() {
-			if ( Instance == this ) {
-				Instance = null;
-			}
-		}
-
-		void Start() {
+		private void Start() {
 			Init();
 		}
 
-		void Update() {
-			if ( !HasFreePlaces ) {
+		private void Update() {
+			if ( HasFreePlaces == false ) 
 				return;
-			}
 
 			_timer += Time.deltaTime;
 
-			if ( (TotalCustomersGenerated >= CustomersTargetNumber) || (!(_timer > CustomerSpawnTime)) ) {
-				return;
-			}
+			if ( (TotalCustomersGenerated >= _customersTargetNumber) || ((_timer > CustomerSpawnTime) == false) )
+				return;			
 
 			SpawnCustomer();
 			_timer = 0f;
 		}
 
-		void SpawnCustomer() {
-			var freePlaces = CustomerPlaces.FindAll(x => x.IsFree);
-			if ( freePlaces.Count <= 0 ) {
-				return;
-			}
-
-			var place = freePlaces[Random.Range(0, freePlaces.Count)];
-			place.PlaceCustomer(GenerateCustomer());
-			TotalCustomersGenerated++;
-			TotalCustomersGeneratedChanged?.Invoke();
-		}
-
-		Customer GenerateCustomer() {
-			var customerGo = Instantiate(Resources.Load<GameObject>(CUSTOMER_PREFABS_PATH));
-			var customer   = customerGo.GetComponent<Customer>();
-
-			var orders = _orderSets.Pop();
-			customer.Init(orders);
-
-			return customer;
-		}
-
-		Order GenerateRandomOrder() {
-			var oc = OrdersController.Instance;
-			return oc.Orders[Random.Range(0, oc.Orders.Count)];
+		private void OnDestroy() {
+			if ( Instance == this )
+				Instance = null;
 		}
 
 		public void Init() {
-			var totalOrders = 0;
+
+			int totalOrders = 0;
+			int orderReduction = 2;
 			_orderSets = new Stack<List<Order>>();
-			for ( var i = 0; i < CustomersTargetNumber; i++ ) {
-				var orders = new List<Order>();
-				var ordersNum = Random.Range(1, 4);
-				for ( var j = 0; j < ordersNum; j++ ) {
+
+			for ( int i = 0; i < _customersTargetNumber; i++ ) {
+				List<Order> orders = new List<Order>();
+
+				int minOrdersNumber = 1;
+				int maxOrdersNumber = 4;
+				int ordersNumber = Random.Range(minOrdersNumber, maxOrdersNumber);
+
+				for ( int j = 0; j < ordersNumber; j++ )
 					orders.Add(GenerateRandomOrder());
-				}
+
 				_orderSets.Push(orders);
-				totalOrders += ordersNum;
+				totalOrders += ordersNumber;
 			}
-			CustomerPlaces.ForEach(x => x.Free());
+
+			_customerPlaces.ForEach(places => places.Free());
 			_timer = 0f;
 
 			TotalCustomersGenerated = 0;
 			TotalCustomersGeneratedChanged?.Invoke();
-			 
-			GameplayController.Instance.OrdersTarget = totalOrders - 2;
+
+			GameplayController.Instance.OrdersTarget = totalOrders - orderReduction;
 		}
 
 		/// <summary>
@@ -123,14 +94,14 @@ namespace CookingPrototype.Controllers {
 		/// </summary>
 		/// <param name="customer"></param>
 		public void FreeCustomer(Customer customer) {
-			var place = CustomerPlaces.Find(x => x.CurCustomer == customer);
-			if ( place == null ) {
+			CustomerPlace place = _customerPlaces.Find(places => places.CurCustomer == customer);
+
+			if ( place == null )
 				return;
-			}
+
 			place.Free();
 			GameplayController.Instance.CheckGameFinish();
 		}
-
 
 		/// <summary>
 		///  Пытаемся обслужить посетителя с заданным заказом и наименьшим оставшимся временем ожидания.
@@ -139,7 +110,39 @@ namespace CookingPrototype.Controllers {
 		/// <param name="order">Заказ, который пытаемся отдать</param>
 		/// <returns>Флаг - результат, удалось ли успешно отдать заказ</returns>
 		public bool ServeOrder(Order order) {
-			throw  new NotImplementedException("ServeOrder: this feature is not implemented.");
+			throw new NotImplementedException("ServeOrder: this feature is not implemented.");
 		}
+
+		private void SpawnCustomer() {
+			List<CustomerPlace> freePlaces = _customerPlaces.FindAll(places => places.IsFree);
+
+			int minCount = 0;
+
+			if ( freePlaces.Count <= minCount )
+				return;
+
+			CustomerPlace place = freePlaces[Random.Range(minCount, freePlaces.Count)];
+			place.PlaceCustomer(GenerateCustomer());
+			TotalCustomersGenerated++;
+			TotalCustomersGeneratedChanged?.Invoke();
+		}
+
+		private Customer GenerateCustomer() {
+			GameObject customerGo = Instantiate(Resources.Load<GameObject>(CUSTOMER_PREFABS_PATH));
+			Customer customer = customerGo.GetComponent<Customer>();
+
+			List<Order> orders = _orderSets.Pop();
+			customer.Init(orders);
+
+			return customer;
+		}
+
+		private Order GenerateRandomOrder() {
+			var orderController = OrdersController.Instance;
+			int minCount = 0;
+
+			return orderController.Orders[Random.Range(minCount, orderController.Orders.Count)];
+		}
+
 	}
 }
