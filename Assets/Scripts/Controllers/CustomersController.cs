@@ -11,8 +11,8 @@ namespace CookingPrototype.Controllers {
 
 		[SerializeField] private List<CustomerPlace> _customerPlaces = null;
 		[SerializeField] private int _customersTargetNumber = 15;
-		[SerializeField] private float CustomerWaitTime = 18f;
-		[SerializeField] private float CustomerSpawnTime = 3f;
+		[SerializeField] private float _customerWaitTime = 18f;
+		[SerializeField] private float _customerSpawnTime = 3f;
 
 		private Stack<List<Order>> _orderSets;
 		private float _timer = 0f;
@@ -21,6 +21,9 @@ namespace CookingPrototype.Controllers {
 
 		[HideInInspector]
 		public int TotalCustomersGenerated { get; private set; } = 0;
+		public int CustomersTargetNumber => _customersTargetNumber;
+		public float CustomerWaitTime => _customerWaitTime;
+		public float CustomerSpawnTime => _customerSpawnTime;
 
 		public event Action TotalCustomersGeneratedChanged;
 
@@ -48,7 +51,7 @@ namespace CookingPrototype.Controllers {
 
 			_timer += Time.deltaTime;
 
-			if ( (TotalCustomersGenerated >= _customersTargetNumber) || ((_timer > CustomerSpawnTime) == false) )
+			if ( (TotalCustomersGenerated >= _customersTargetNumber) || ((_timer > _customerSpawnTime) == false) )
 				return;			
 
 			SpawnCustomer();
