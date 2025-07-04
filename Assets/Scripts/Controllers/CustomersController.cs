@@ -5,8 +5,10 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 using CookingPrototype.Kitchen;
 
-namespace CookingPrototype.Controllers {
-	public class CustomersController : MonoBehaviour {
+namespace CookingPrototype.Controllers
+{
+	public class CustomersController : MonoBehaviour
+	{
 		private const string CUSTOMER_PREFABS_PATH = "Prefabs/Customer";
 
 		[SerializeField] private List<CustomerPlace> _customerPlaces = null;
@@ -19,11 +21,9 @@ namespace CookingPrototype.Controllers {
 
 		public static CustomersController Instance { get; private set; }
 
-		[HideInInspector]
 		public int TotalCustomersGenerated { get; private set; } = 0;
 		public int CustomersTargetNumber => _customersTargetNumber;
 		public float CustomerWaitTime => _customerWaitTime;
-		public float CustomerSpawnTime => _customerSpawnTime;
 
 		public event Action TotalCustomersGeneratedChanged;
 
@@ -35,48 +35,52 @@ namespace CookingPrototype.Controllers {
 
 		private void Awake()
 		{
-			if ( Instance != null )
+			if (Instance != null)
 				Debug.LogError("Another instance of CustomersController already exists!");
 
 			Instance = this;
 		}
 
-		private void Start() {
+		private void Start()
+		{
 			Init();
 		}
 
-		private void Update() {
-			if ( HasFreePlaces == false ) 
+		private void Update()
+		{
+			if (HasFreePlaces == false) 
 				return;
 
 			_timer += Time.deltaTime;
 
-			if ( (TotalCustomersGenerated >= _customersTargetNumber) || ((_timer > _customerSpawnTime) == false) )
+			if ((TotalCustomersGenerated >= _customersTargetNumber) || ((_timer > _customerSpawnTime) == false))
 				return;			
 
 			SpawnCustomer();
 			_timer = 0f;
 		}
 
-		private void OnDestroy() {
-			if ( Instance == this )
+		private void OnDestroy()
+		{
+			if (Instance == this)
 				Instance = null;
 		}
 
-		public void Init() {
-
+		public void Init()
+		{
 			int totalOrders = 0;
 			int orderReduction = 2;
 			_orderSets = new Stack<List<Order>>();
 
-			for ( int i = 0; i < _customersTargetNumber; i++ ) {
+			for (int i = 0; i < _customersTargetNumber; i++)
+			{
 				List<Order> orders = new List<Order>();
 
 				int minOrdersNumber = 1;
 				int maxOrdersNumber = 4;
 				int ordersNumber = Random.Range(minOrdersNumber, maxOrdersNumber);
 
-				for ( int j = 0; j < ordersNumber; j++ )
+				for (int j = 0; j < ordersNumber; j++)
 					orders.Add(GenerateRandomOrder());
 
 				_orderSets.Push(orders);
@@ -92,36 +96,58 @@ namespace CookingPrototype.Controllers {
 			GameplayController.Instance.OrdersTarget = totalOrders - orderReduction;
 		}
 
-		/// <summary>
-		/// Отпускаем указанного посетителя
-		/// </summary>
-		/// <param name="customer"></param>
-		public void FreeCustomer(Customer customer) {
-			CustomerPlace place = _customerPlaces.Find(places => places.CurCustomer == customer);
+		public void FreeCustomer(Customer customer)
+		{
+			CustomerPlace place = _customerPlaces.Find(places => places.CurrentCustomer == customer);
 
-			if ( place == null )
+			if (place == null)
 				return;
 
 			place.Free();
 			GameplayController.Instance.CheckGameFinish();
 		}
 
-		/// <summary>
-		///  Пытаемся обслужить посетителя с заданным заказом и наименьшим оставшимся временем ожидания.
-		///  Если у посетителя это последний оставшийся заказ из списка, то отпускаем его.
-		/// </summary>
-		/// <param name="order">Заказ, который пытаемся отдать</param>
-		/// <returns>Флаг - результат, удалось ли успешно отдать заказ</returns>
-		public bool ServeOrder(Order order) {
-			throw new NotImplementedException("ServeOrder: this feature is not implemented.");
+		public bool ServeOrder(Order order)
+		{
+			Customer customerToServe = null;
+			float minWaitTime = float.MaxValue;
+
+			CustomerPlace placeToServe = null;
+
+			foreach (CustomerPlace place in _customerPlaces)
+			{
+				if (place.IsFree == false && place.CurrentCustomer.Orders.Contains(order) && place.CurrentCustomer.WaitTime < minWaitTime)
+				{
+					customerToServe = place.CurrentCustomer;
+					minWaitTime = place.CurrentCustomer.WaitTime;
+					placeToServe = place;
+				}
+			}
+
+			if (customerToServe == null)
+				return false;
+
+			bool orderServed = customerToServe.ServeOrder(order);
+
+			if (orderServed && customerToServe.Orders.Count == 0) 
+			{
+				if (placeToServe != null)
+				{
+					placeToServe.Free();
+					GameplayController.Instance.CheckGameFinish();
+				}
+			}
+
+			return orderServed;
 		}
 
-		private void SpawnCustomer() {
+		private void SpawnCustomer()
+		{
 			List<CustomerPlace> freePlaces = _customerPlaces.FindAll(places => places.IsFree);
 
 			int minCount = 0;
 
-			if ( freePlaces.Count <= minCount )
+			if (freePlaces.Count <= minCount)
 				return;
 
 			CustomerPlace place = freePlaces[Random.Range(minCount, freePlaces.Count)];
@@ -130,9 +156,10 @@ namespace CookingPrototype.Controllers {
 			TotalCustomersGeneratedChanged?.Invoke();
 		}
 
-		private Customer GenerateCustomer() {
-			GameObject customerGo = Instantiate(Resources.Load<GameObject>(CUSTOMER_PREFABS_PATH));
-			Customer customer = customerGo.GetComponent<Customer>();
+		private Customer GenerateCustomer()
+		{
+			GameObject customerGameObject = Instantiate(Resources.Load<GameObject>(CUSTOMER_PREFABS_PATH));
+			Customer customer = customerGameObject.GetComponent<Customer>();
 
 			List<Order> orders = _orderSets.Pop();
 			customer.Init(orders);
@@ -140,12 +167,12 @@ namespace CookingPrototype.Controllers {
 			return customer;
 		}
 
-		private Order GenerateRandomOrder() {
-			var orderController = OrdersController.Instance;
+		private Order GenerateRandomOrder()
+		{
+			OrdersController orderController = OrdersController.Instance;
 			int minCount = 0;
 
 			return orderController.Orders[Random.Range(minCount, orderController.Orders.Count)];
 		}
-
 	}
 }
