@@ -1,71 +1,84 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-using System;
-
-namespace CookingPrototype.Kitchen {
-	public sealed class CookingTimer : MonoBehaviour {
+namespace CookingPrototype.Kitchen
+{
+	public sealed class CookingTimer : MonoBehaviour
+	{
 		[Serializable]
-		public class TimerSpriteSet {
-			public Sprite Background = null;
-			public Sprite Foreground = null;
+		public class TimerSpriteSet
+		{
+			[SerializeField] private Sprite _background;
+			[SerializeField] private Sprite _foreground;
+
+			public Sprite Background => _background;
+			public Sprite Foreground => _foreground;
 		}
 
-		public FoodPlace Place = null;
+		[SerializeField] private FoodPlace _place;
+		[SerializeField] private Image _background;
+		[SerializeField] private Image _foreground;
 
-		public Image Background = null;
-		public Image Foreground = null;
+		[SerializeField] private TimerSpriteSet _normal;
+		[SerializeField] private TimerSpriteSet _overcook;
 
-		public TimerSpriteSet Normal   = null;
-		public TimerSpriteSet Overcook = null;
-
-		TimerSpriteSet CurSet {
-			set {
-				if ( value == null ) {
+		private TimerSpriteSet CurrentSet
+		{
+			set
+			{
+				if ( value == null )
+				{
 					return;
 				}
-				if ( Background ) {
-					Background.sprite = value.Background;
-					Background.SetNativeSize();
+				if ( _background )
+				{
+					_background.sprite = value.Background;
+					_background.SetNativeSize();
 				}
-				if ( Foreground ) {
-					Foreground.sprite = value.Foreground;
-					Foreground.SetNativeSize();
+				if ( _foreground )
+				{
+					_foreground.sprite = value.Foreground;
+					_foreground.SetNativeSize();
 				}
 			}
 		}
 
-		void Awake() {
-			if ( Place ) {
-				Place.FoodPlaceUpdated += OnFoodPlaceUpdated;
-			}
+		private void Awake()
+		{
+			if (_place)
+				_place.FoodPlaceUpdated += OnFoodPlaceUpdated;
 		}
 
-		void OnDestroy() {
-			if ( Place ) {
-				Place.FoodPlaceUpdated -= OnFoodPlaceUpdated;
-			}
-		}
-
-		void Start() {
+		private void Start()
+		{
 			OnFoodPlaceUpdated();
 		}
 
-		void Update() {
-			if ( Place == null ) {
+		private void Update()
+		{
+			if (_place == null)
 				return;
-			}
 
-			if ( Place.IsCooking ) {
-				Foreground.fillAmount = Place.TimerNormalized;
-			}
+			if ( _place.IsCooking )
+				_foreground.fillAmount = _place.TimerNormalized;
 		}
 
-		void OnFoodPlaceUpdated() {
-			if ( Place.IsCooking ) {
+		private void OnDestroy()
+		{
+			if (_place)
+				_place.FoodPlaceUpdated -= OnFoodPlaceUpdated;
+		}
+
+		private void OnFoodPlaceUpdated()
+		{
+			if ( _place.IsCooking )
+			{
 				gameObject.SetActive(true);
-				CurSet = Place.CurFood.CurStatus == Food.FoodStatus.Raw ? Normal : Overcook;
-			} else {
+				CurrentSet = _place.CurrentFood.CurStatus == Food.FoodStatus.Raw ? _normal : _overcook;
+			}
+			else
+			{
 				gameObject.SetActive(false);
 			}
 		}
