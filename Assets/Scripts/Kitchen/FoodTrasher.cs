@@ -1,27 +1,49 @@
-using System;
-
 using UnityEngine;
-
 using JetBrains.Annotations;
 
-namespace CookingPrototype.Kitchen {
+namespace CookingPrototype.Kitchen
+{
 	[RequireComponent(typeof(FoodPlace))]
-	public sealed class FoodTrasher : MonoBehaviour {
+	public sealed class FoodTrasher : MonoBehaviour
+	{
+		[SerializeField] private float _doubleTapMaxDelay = 0.3f;
 
-		FoodPlace _place = null;
-		float     _timer = 0f;
+		private FoodPlace _place;
+		private float _timer = 0f;
+		private float _lastTapTime = 0f;
 
-		void Start() {
+		private void Start()
+		{
 			_place = GetComponent<FoodPlace>();
 			_timer = Time.realtimeSinceStartup;
 		}
 
-		/// <summary>
-		/// Освобождает место по двойному тапу если еда на этом месте сгоревшая.
-		/// </summary>
 		[UsedImplicitly]
-		public void TryTrashFood() {
-			throw new NotImplementedException("TryTrashFood: this feature is not implemented");
+		public void TryTrashFood()
+		{
+			if (_place.CurrentFood == null)
+				return;
+
+			if (_place.CurrentFood.CurStatus != Food.FoodStatus.Overcooked)
+				return; 
+
+			if (Time.time - _lastTapTime < _doubleTapMaxDelay)
+			{
+				TrashFood();
+				_lastTapTime = 0f;
+			}
+			else
+			{
+				_lastTapTime = Time.time;
+			}
+		}
+
+		private void TrashFood()
+		{
+			if (_place.CurrentFood != null && _place.CurrentFood.GameObject != null)
+				Destroy(_place.CurrentFood.GameObject);
+
+			_place.FreePlace();
 		}
 	}
 }
