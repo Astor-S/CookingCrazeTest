@@ -594,8 +594,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d73cbe40a469814d880ea088200315f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OnlyTransferCooked: 1
-  DestPlaces:
+  _onlyTransferCooked: 1
+  _destPlaces:
   - {fileID: 639950379}
   - {fileID: 541366787}
   - {fileID: 949728618}
@@ -4664,8 +4664,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d73cbe40a469814d880ea088200315f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OnlyTransferCooked: 1
-  DestPlaces:
+  _onlyTransferCooked: 1
+  _destPlaces:
   - {fileID: 639950379}
   - {fileID: 541366787}
   - {fileID: 949728618}
@@ -10946,8 +10946,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d73cbe40a469814d880ea088200315f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OnlyTransferCooked: 1
-  DestPlaces:
+  _onlyTransferCooked: 1
+  _destPlaces:
   - {fileID: 639950379}
   - {fileID: 541366787}
   - {fileID: 949728618}

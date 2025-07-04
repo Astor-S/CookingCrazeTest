@@ -1,38 +1,43 @@
 using System.Collections.Generic;
-
 using UnityEngine;
-
 using JetBrains.Annotations;
 
-namespace CookingPrototype.Kitchen {
+namespace CookingPrototype.Kitchen
+{
 	[RequireComponent(typeof(FoodPlace))]
-	public sealed class FoodTransfer : MonoBehaviour {
-		public bool                    OnlyTransferCooked = true;
-		public List<AbstractFoodPlace> DestPlaces         = new List<AbstractFoodPlace>();
+	public sealed class FoodTransfer : MonoBehaviour
+	{
+		[SerializeField] private bool _onlyTransferCooked = true;
+		[SerializeField] private List<AbstractFoodPlace> _destPlaces = new List<AbstractFoodPlace>();
 
-		FoodPlace _place = null;
+		private FoodPlace _place;
 
-		void Start() {
+		private void Start()
+		{
 			_place = GetComponent<FoodPlace>();
 		}
 
 		[UsedImplicitly]
-		public void TryTransferFood() {
-			var food = _place.CurFood;
+		public void TryTransferFood()
+		{
+			Food food = _place.CurrentFood;
 
-			if ( food == null ) {
+			if ( food == null )
 				return;
-			}
 
-			if ( OnlyTransferCooked && (food.CurStatus != Food.FoodStatus.Cooked) ) {
+			if (_onlyTransferCooked && (food.CurrentStatus != Food.FoodStatus.Cooked))
+			{
 				_place.TryPlaceFood(food);
+
 				return;
 			}
-			foreach ( var place in DestPlaces ) {
-				if ( !place.TryPlaceFood(food) ) {
+			foreach (AbstractFoodPlace place in _destPlaces)
+			{
+				if (place.TryPlaceFood(food) == false )
 					continue;
-				}
+
 				_place.FreePlace();
+
 				return;
 			}
 		}
