@@ -11,28 +11,28 @@ namespace CookingPrototype.Kitchen
 			Overcooked,
 		}
 
-		public FoodStatus CurStatus { get; private set; }
+		public FoodStatus CurrentStatus { get; private set; }
 		public GameObject GameObject { get; private set; }
 		public string Name { get; }
 
 		public Food(string name, FoodStatus status = FoodStatus.Raw)
 		{
 			Name = name;
-			CurStatus = status;
+			CurrentStatus = status;
 		}
 
 		public void CookStep()
 		{
-			switch (CurStatus)
+			switch (CurrentStatus)
 			{
 				case FoodStatus.Raw:
 				{
-					CurStatus = FoodStatus.Cooked;
+					CurrentStatus = FoodStatus.Cooked;
 					return;
 				}
 				case FoodStatus.Cooked:
 				{
-					CurStatus = FoodStatus.Overcooked;
+					CurrentStatus = FoodStatus.Overcooked;
 					return;
 				}
 				default:

@@ -24,7 +24,7 @@ namespace CookingPrototype.Kitchen
 			if (_place.CurrentFood == null)
 				return;
 
-			if (_place.CurrentFood.CurStatus != Food.FoodStatus.Overcooked)
+			if (_place.CurrentFood.CurrentStatus != Food.FoodStatus.Overcooked)
 				return; 
 
 			if (Time.time - _lastTapTime < _doubleTapMaxDelay)
