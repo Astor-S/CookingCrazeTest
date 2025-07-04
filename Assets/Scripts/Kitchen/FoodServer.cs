@@ -1,27 +1,30 @@
 using System.Collections.Generic;
-
 using UnityEngine;
-
 using CookingPrototype.Controllers;
 
-namespace CookingPrototype.Kitchen {
+namespace CookingPrototype.Kitchen
+{
 	[RequireComponent(typeof(FoodPlace))]
-	public sealed class FoodServer : MonoBehaviour {
+	public sealed class FoodServer : MonoBehaviour
+	{
+		private const int OrderNameListCapacity = 1;
 
-		FoodPlace _place = null;
+		private FoodPlace _place;
 
-		void Start() {
+		private void Start()
+		{
 			_place = GetComponent<FoodPlace>();
 		}
 
-		public bool TryServeFood() {
-			if ( _place.IsFree || (_place.CurFood.CurStatus != Food.FoodStatus.Cooked) ) {
+		public bool TryServeFood()
+		{
+			if (_place.IsFree || (_place.CurrentFood.CurrentStatus != Food.FoodStatus.Cooked))
 				return false;
-			}
-			var order = OrdersController.Instance.FindOrder(new List<string>(1) { _place.CurFood.Name });
-			if ( (order == null) || !GameplayController.Instance.TryServeOrder(order) ) {
+
+			Order order = OrdersController.Instance.FindOrder(new List<string>(OrderNameListCapacity){_place.CurrentFood.Name});
+
+			if ((order == null) || GameplayController.Instance.TryServeOrder(order) == false)
 				return false;
-			}
 
 			_place.FreePlace();
 			return true;
