@@ -27,16 +27,16 @@ namespace CookingPrototype.Kitchen
 		{
 			set
 			{
-				if ( value == null )
+				if (value == null)
 				{
 					return;
 				}
-				if ( _background )
+				if (_background)
 				{
 					_background.sprite = value.Background;
 					_background.SetNativeSize();
 				}
-				if ( _foreground )
+				if (_foreground)
 				{
 					_foreground.sprite = value.Foreground;
 					_foreground.SetNativeSize();
@@ -72,7 +72,7 @@ namespace CookingPrototype.Kitchen
 
 		private void OnFoodPlaceUpdated()
 		{
-			if ( _place.IsCooking )
+			if (_place.IsCooking)
 			{
 				gameObject.SetActive(true);
 				CurrentSet = _place.CurrentFood.CurStatus == Food.FoodStatus.Raw ? _normal : _overcook;
