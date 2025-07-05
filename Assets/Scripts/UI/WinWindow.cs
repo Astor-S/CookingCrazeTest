@@ -1,41 +1,41 @@
 using UnityEngine;
 using UnityEngine.UI;
-
 using CookingPrototype.Controllers;
-
 using TMPro;
 
-namespace CookingPrototype.UI {
-	public sealed class WinWindow : MonoBehaviour {
-		public Image    GoalBar     = null;
-		public TMP_Text GoalText    = null;
-		public Button   OkButton    = null;
-		public Button   CloseButton = null;
+namespace CookingPrototype.UI
+{
+	public sealed class WinWindow : MonoBehaviour
+	{
+		private readonly bool _isInit = false;
 
-		bool _isInit = false;
+		[SerializeField] private Image _goalBar;
+		[SerializeField] private TMP_Text _goalText;
+		[SerializeField] private Button _okButton;
+		[SerializeField] private Button _closeButton;
 
-		void Init() {
-			var gc = GameplayController.Instance;
-
-			OkButton   .onClick.AddListener(gc.CloseGame);
-			CloseButton.onClick.AddListener(gc.CloseGame);
-		}
-
-		public void Show () {
-			if ( !_isInit ) {
+		public void Show()
+		{
+			if (_isInit == false)
 				Init();
-			}
 
-			var gc = GameplayController.Instance;
+			GameplayController gameplayContoller = GameplayController.Instance;
 
-			GoalText.text      = $"{gc.TotalOrdersServed}/{gc.OrdersTarget}";
-			GoalBar.fillAmount = Mathf.Clamp01((float) gc.TotalOrdersServed / gc.OrdersTarget);
+			_goalText.text = $"{gameplayContoller.TotalOrdersServed}/{gameplayContoller.OrdersTarget}";
+			_goalBar.fillAmount = Mathf.Clamp01((float) gameplayContoller.TotalOrdersServed / gameplayContoller.OrdersTarget);
 
 			gameObject.SetActive(true);
 		}
 
-		public void Hide() {
+		public void Hide() =>
 			gameObject.SetActive(false);
+
+		private void Init()
+		{
+			GameplayController gameplayContoller = GameplayController.Instance;
+
+			_okButton.onClick.AddListener(gameplayContoller.CloseGame);
+			_closeButton.onClick.AddListener(gameplayContoller.CloseGame);
 		}
 	}
 }
