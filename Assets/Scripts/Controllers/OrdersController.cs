@@ -1,90 +1,97 @@
-using System.Xml;
-using System.IO;
-using System.Linq;
 using System.Collections.Generic;
-
+using System.Linq;
+using System.IO;
+using System.Xml;
 using UnityEngine;
+using CookingPrototype.Kitchen;
 
-using  CookingPrototype.Kitchen;
+namespace CookingPrototype.Controllers
+{
+	public sealed class OrdersController : MonoBehaviour
+	{
+		private static OrdersController _instance;
+		private readonly List<Order> _orders = new List<Order>();
 
-namespace CookingPrototype.Controllers {
-	public sealed class OrdersController : MonoBehaviour {
+		private bool _isInit = false;
 
-		static OrdersController _instance = null;
-
-		public static OrdersController Instance {
-			get {
-				if ( !_instance ) {
+		public static OrdersController Instance
+		{
+			get
+			{
+				if (_instance == false)
 					_instance = FindAnyObjectByType<OrdersController>();
-				}
-				if ( _instance && !_instance._isInit ) {
+				if (_instance && _instance._isInit == false)
 					_instance.Init();
-				}
+
 				return _instance;
 			}
-			set { _instance = value; }
+			set => _instance = value;
 		}
 
-		public List<Order> Orders = new List<Order>();
+		public List<Order> Orders => _orders;
 
-		bool _isInit = false;
-
-		void Awake() {
-			if ( (_instance != null) && (_instance != this) ) {
+		private void Awake()
+		{
+			if ((_instance != null) && (_instance != this))
 				Debug.LogError("Another instance of OrdersController already exists!");
-			}
+
 			Instance = this;
 		}
-
-		void OnDestroy() {
-			if ( Instance == this ) {
-				Instance = null;
-			}
-		}
-
-		void Start() {
+		private void Start()
+		{
 			Init();
 		}
 
-		void Init() {
-			if ( _isInit ) {
+		private void OnDestroy()
+		{
+			if (Instance == this)
+				Instance = null;
+		}
+
+		public Order FindOrder(List<string> foods)
+		{
+			return _orders.Find(order =>
+			{
+				if (order.Foods.Count != foods.Count)
+					return false;
+
+				foreach (Order.OrderFood orderFood in order.Foods)
+					if (order.Foods.Count(foodItem => foodItem.Name == orderFood.Name) != foods.Count(foodName => foodName == orderFood.Name))
+						return false;
+
+				return true;
+			});
+		}
+
+		private void Init()
+		{
+			if (_isInit)
 				return;
-			}
-			var ordersConfig = Resources.Load<TextAsset>("Configs/Orders");
-			var ordersXml = new XmlDocument();
-			using ( var reader = new StringReader(ordersConfig.ToString()) ) {
+
+			TextAsset ordersConfig = Resources.Load<TextAsset>("Configs/Orders");
+			XmlDocument ordersXml = new XmlDocument();
+			using (StringReader reader = new StringReader(ordersConfig.ToString()))
 				ordersXml.Load(reader);
+
+			XmlElement rootElem = ordersXml.DocumentElement;
+
+			foreach (XmlNode node in rootElem.SelectNodes("order"))
+			{
+				Order order = ParseOrder(node);
+				_orders.Add(order);
 			}
 
-			var rootElem = ordersXml.DocumentElement;
-			foreach ( XmlNode node in rootElem.SelectNodes("order") ) {
-				var order = ParseOrder(node);
-				Orders.Add(order);
-			}
 			_isInit = true;
 		}
 
-		Order ParseOrder(XmlNode node) {
-			var foods = new List<Order.OrderFood>();
-			foreach ( XmlNode foodNode in node.SelectNodes("food") ) {
+		private Order ParseOrder(XmlNode node)
+		{
+			List<Order.OrderFood> foods = new List<Order.OrderFood>();
+
+			foreach (XmlNode foodNode in node.SelectNodes("food"))
 				foods.Add(new Order.OrderFood(foodNode.InnerText, foodNode.SelectSingleNode("@needs")?.InnerText));
-			}
+
 			return new Order(node.SelectSingleNode("@name").Value, foods);
-		}
-
-		public Order FindOrder(List<string> foods) {
-			return Orders.Find(x => {
-				if ( x.Foods.Count != foods.Count ) {
-					return false;
-				}
-
-				foreach ( var food in x.Foods ) {
-					if ( x.Foods.Count(f => f.Name == food.Name) != foods.Count(f => f == food.Name) ) {
-						return false;
-					}
-				}
-				return true;
-			});
 		}
 	}
 }
