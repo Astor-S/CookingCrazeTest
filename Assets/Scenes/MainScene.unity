@@ -5412,9 +5412,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8318fdc49e88ebf4ebd3b3ed0ace340f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OrdersBar: {fileID: 1716469696}
-  OrdersCountText: {fileID: 485637300}
-  CustomersCountText: {fileID: 529874717}
+  _ordersBar: {fileID: 1716469696}
+  _ordersCountText: {fileID: 485637300}
+  _customersCountText: {fileID: 529874717}
 --- !u!1 &592568642
 GameObject:
   m_ObjectHideFlags: 0
