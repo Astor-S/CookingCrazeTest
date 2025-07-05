@@ -645,8 +645,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97a72b5bd3782404ab188dad22a9a75a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FoodName: Cola
-  Places:
+  _foodName: Cola
+  _places:
   - {fileID: 508356677}
   - {fileID: 1087345511}
   - {fileID: 1053909144}
