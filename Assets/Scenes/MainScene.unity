@@ -2718,8 +2718,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5cb466b452d2f24789a843daa6cbff5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FoodName: HotDogSausage
-  Places:
+  _foodName: HotDogSausage
+  _places:
   - {fileID: 1861298876}
   - {fileID: 319692752}
   - {fileID: 26057713}
@@ -8916,8 +8916,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5cb466b452d2f24789a843daa6cbff5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FoodName: HotDogMustard
-  Places:
+  _foodName: HotDogMustard
+  _places:
   - {fileID: 1165884813}
   - {fileID: 412982146}
   - {fileID: 817961412}
@@ -10052,8 +10052,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5cb466b452d2f24789a843daa6cbff5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FoodName: BurgerCheese
-  Places:
+  _foodName: BurgerCheese
+  _places:
   - {fileID: 639950379}
   - {fileID: 541366787}
   - {fileID: 949728618}
@@ -11788,8 +11788,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5cb466b452d2f24789a843daa6cbff5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FoodName: BurgerBun
-  Places:
+  _foodName: BurgerBun
+  _places:
   - {fileID: 639950379}
   - {fileID: 541366787}
   - {fileID: 949728618}
@@ -15469,8 +15469,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5cb466b452d2f24789a843daa6cbff5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FoodName: HotDogBun
-  Places:
+  _foodName: HotDogBun
+  _places:
   - {fileID: 1165884813}
   - {fileID: 412982146}
   - {fileID: 817961412}
@@ -18122,8 +18122,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5cb466b452d2f24789a843daa6cbff5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FoodName: BurgerCutlet
-  Places:
+  _foodName: BurgerCutlet
+  _places:
   - {fileID: 748752193}
   - {fileID: 55610697}
   - {fileID: 1836333823}
@@ -18865,8 +18865,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5cb466b452d2f24789a843daa6cbff5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FoodName: BurgerTomato
-  Places:
+  _foodName: BurgerTomato
+  _places:
   - {fileID: 639950379}
   - {fileID: 541366787}
   - {fileID: 949728618}
