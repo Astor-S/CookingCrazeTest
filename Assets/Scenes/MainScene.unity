@@ -2392,13 +2392,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60f468994a7bd7b408b3478c47698d7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FoodName: BurgerCutlet
-  Set:
-    Empty: {fileID: 0}
-    RawVisualizer: {fileID: 1188964368}
-    CookedVisualizer: {fileID: 1659096967}
-    OvercookedVisualizer: {fileID: 1844431135}
-  Place: {fileID: 55610697}
+  _foodName: BurgerCutlet
+  _set:
+    _empty: {fileID: 0}
+    _rawVisualizer: {fileID: 1188964368}
+    _cookedVisualizer: {fileID: 1659096967}
+    _overcookedVisualizer: {fileID: 1844431135}
+  _place: {fileID: 55610697}
 --- !u!1 &304714174
 GameObject:
   m_ObjectHideFlags: 0
@@ -4399,13 +4399,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60f468994a7bd7b408b3478c47698d7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FoodName: Cola
-  Set:
-    Empty: {fileID: 0}
-    RawVisualizer: {fileID: 1470495835}
-    CookedVisualizer: {fileID: 1256384142}
-    OvercookedVisualizer: {fileID: 0}
-  Place: {fileID: 508356677}
+  _foodName: Cola
+  _set:
+    _empty: {fileID: 0}
+    _rawVisualizer: {fileID: 1470495835}
+    _cookedVisualizer: {fileID: 1256384142}
+    _overcookedVisualizer: {fileID: 0}
+  _place: {fileID: 508356677}
 --- !u!114 &508356677
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6800,13 +6800,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60f468994a7bd7b408b3478c47698d7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FoodName: HotDogSausage
-  Set:
-    Empty: {fileID: 0}
-    RawVisualizer: {fileID: 1861526316}
-    CookedVisualizer: {fileID: 2116084104}
-    OvercookedVisualizer: {fileID: 1370380217}
-  Place: {fileID: 319692752}
+  _foodName: HotDogSausage
+  _set:
+    _empty: {fileID: 0}
+    _rawVisualizer: {fileID: 1861526316}
+    _cookedVisualizer: {fileID: 2116084104}
+    _overcookedVisualizer: {fileID: 1370380217}
+  _place: {fileID: 319692752}
 --- !u!1 &810710946
 GameObject:
   m_ObjectHideFlags: 0
@@ -9682,13 +9682,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60f468994a7bd7b408b3478c47698d7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FoodName: Cola
-  Set:
-    Empty: {fileID: 0}
-    RawVisualizer: {fileID: 19298171}
-    CookedVisualizer: {fileID: 959999433}
-    OvercookedVisualizer: {fileID: 0}
-  Place: {fileID: 1053909144}
+  _foodName: Cola
+  _set:
+    _empty: {fileID: 0}
+    _rawVisualizer: {fileID: 19298171}
+    _cookedVisualizer: {fileID: 959999433}
+    _overcookedVisualizer: {fileID: 0}
+  _place: {fileID: 1053909144}
 --- !u!114 &1053909144
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9842,13 +9842,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60f468994a7bd7b408b3478c47698d7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FoodName: Cola
-  Set:
-    Empty: {fileID: 0}
-    RawVisualizer: {fileID: 946927369}
-    CookedVisualizer: {fileID: 1710996404}
-    OvercookedVisualizer: {fileID: 0}
-  Place: {fileID: 1087345511}
+  _foodName: Cola
+  _set:
+    _empty: {fileID: 0}
+    _rawVisualizer: {fileID: 946927369}
+    _cookedVisualizer: {fileID: 1710996404}
+    _overcookedVisualizer: {fileID: 0}
+  _place: {fileID: 1087345511}
 --- !u!114 &1087345511
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12887,13 +12887,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60f468994a7bd7b408b3478c47698d7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FoodName: BurgerCutlet
-  Set:
-    Empty: {fileID: 0}
-    RawVisualizer: {fileID: 111483584}
-    CookedVisualizer: {fileID: 532750575}
-    OvercookedVisualizer: {fileID: 2134420426}
-  Place: {fileID: 1836333823}
+  _foodName: BurgerCutlet
+  _set:
+    _empty: {fileID: 0}
+    _rawVisualizer: {fileID: 111483584}
+    _cookedVisualizer: {fileID: 532750575}
+    _overcookedVisualizer: {fileID: 2134420426}
+  _place: {fileID: 1836333823}
 --- !u!1 &1470495833
 GameObject:
   m_ObjectHideFlags: 0
@@ -13091,13 +13091,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60f468994a7bd7b408b3478c47698d7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FoodName: HotDogSausage
-  Set:
-    Empty: {fileID: 0}
-    RawVisualizer: {fileID: 2121933923}
-    CookedVisualizer: {fileID: 810710948}
-    OvercookedVisualizer: {fileID: 96177119}
-  Place: {fileID: 26057713}
+  _foodName: HotDogSausage
+  _set:
+    _empty: {fileID: 0}
+    _rawVisualizer: {fileID: 2121933923}
+    _cookedVisualizer: {fileID: 810710948}
+    _overcookedVisualizer: {fileID: 96177119}
+  _place: {fileID: 26057713}
 --- !u!1 &1496033785
 GameObject:
   m_ObjectHideFlags: 0
@@ -13717,13 +13717,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60f468994a7bd7b408b3478c47698d7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FoodName: BurgerCutlet
-  Set:
-    Empty: {fileID: 0}
-    RawVisualizer: {fileID: 909968823}
-    CookedVisualizer: {fileID: 2081261403}
-    OvercookedVisualizer: {fileID: 2117200877}
-  Place: {fileID: 748752193}
+  _foodName: BurgerCutlet
+  _set:
+    _empty: {fileID: 0}
+    _rawVisualizer: {fileID: 909968823}
+    _cookedVisualizer: {fileID: 2081261403}
+    _overcookedVisualizer: {fileID: 2117200877}
+  _place: {fileID: 748752193}
 --- !u!1 &1589936921
 GameObject:
   m_ObjectHideFlags: 0
@@ -13775,13 +13775,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60f468994a7bd7b408b3478c47698d7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FoodName: HotDogSausage
-  Set:
-    Empty: {fileID: 0}
-    RawVisualizer: {fileID: 198494064}
-    CookedVisualizer: {fileID: 1776076154}
-    OvercookedVisualizer: {fileID: 1245665102}
-  Place: {fileID: 1861298876}
+  _foodName: HotDogSausage
+  _set:
+    _empty: {fileID: 0}
+    _rawVisualizer: {fileID: 198494064}
+    _cookedVisualizer: {fileID: 1776076154}
+    _overcookedVisualizer: {fileID: 1245665102}
+  _place: {fileID: 1861298876}
 --- !u!1 &1603065364
 GameObject:
   m_ObjectHideFlags: 0
