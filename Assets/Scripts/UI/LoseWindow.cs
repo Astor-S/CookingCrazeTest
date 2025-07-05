@@ -1,43 +1,43 @@
 using UnityEngine;
 using UnityEngine.UI;
-
-using  CookingPrototype.Controllers;
-
+using CookingPrototype.Controllers;
 using TMPro;
 
-namespace CookingPrototype.UI {
-	public sealed class LoseWindow : MonoBehaviour {
-		public Image    GoalBar      = null;
-		public TMP_Text GoalText     = null;
-		public Button   ReplayButton = null;
-		public Button   ExitButton   = null;
-		public Button   CloseButton  = null;
+namespace CookingPrototype.UI
+{
+	public sealed class LoseWindow : MonoBehaviour
+	{
+		private readonly bool _isInit = false;
 
-		bool _isInit = false;
+		[SerializeField] private Image _goalBar;
+		[SerializeField] private TMP_Text _goalText;
+		[SerializeField] private Button _replayButton;
+		[SerializeField] private Button _exitButton;
+		[SerializeField] private Button _closeButton;
 
-		void Init() {
-			var gc = GameplayController.Instance;
-
-			ReplayButton.onClick.AddListener(gc.Restart);
-			ExitButton  .onClick.AddListener(gc.CloseGame);
-			CloseButton .onClick.AddListener(gc.CloseGame);
-		}
-
-		public void Show() {
-			if ( !_isInit ) {
+		public void Show()
+		{
+			if (_isInit == false)
 				Init();
-			}
 
-			var gc = GameplayController.Instance;
+			GameplayController gameplayController = GameplayController.Instance;
 
-			GoalBar.fillAmount = Mathf.Clamp01((float) gc.TotalOrdersServed / gc.OrdersTarget);
-			GoalText.text = $"{gc.TotalOrdersServed}/{gc.OrdersTarget}";
+			_goalBar.fillAmount = Mathf.Clamp01((float) gameplayController.TotalOrdersServed / gameplayController.OrdersTarget);
+			_goalText.text = $"{gameplayController.TotalOrdersServed}/{gameplayController.OrdersTarget}";
 
 			gameObject.SetActive(true);
 		}
 
-		public void Hide() {
+		public void Hide() =>
 			gameObject.SetActive(false);
+
+		private void Init()
+		{
+			GameplayController gameplayController = GameplayController.Instance;
+
+			_replayButton.onClick.AddListener(gameplayController.Restart);
+			_exitButton.onClick.AddListener(gameplayController.CloseGame);
+			_closeButton.onClick.AddListener(gameplayController.CloseGame);
 		}
 	}
 }

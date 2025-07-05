@@ -16931,11 +16931,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cb22eb22efb3864b8cf1e837cf4d8b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GoalBar: {fileID: 419297040}
-  GoalText: {fileID: 471724313}
-  ReplayButton: {fileID: 962593483}
-  ExitButton: {fileID: 1195304561}
-  CloseButton: {fileID: 1328174421}
+  _goalBar: {fileID: 419297040}
+  _goalText: {fileID: 471724313}
+  _replayButton: {fileID: 962593483}
+  _exitButton: {fileID: 1195304561}
+  _closeButton: {fileID: 1328174421}
 --- !u!4 &1872986066
 Transform:
   m_ObjectHideFlags: 0
