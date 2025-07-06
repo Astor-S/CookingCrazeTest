@@ -9,13 +9,11 @@ namespace CookingPrototype.Kitchen
 		[SerializeField] private float _doubleTapMaxDelay = 0.3f;
 
 		private FoodPlace _place;
-		private float _timer = 0f;
 		private float _lastTapTime = 0f;
 
 		private void Start()
 		{
 			_place = GetComponent<FoodPlace>();
-			_timer = Time.realtimeSinceStartup;
 		}
 
 		[UsedImplicitly]
@@ -40,10 +38,10 @@ namespace CookingPrototype.Kitchen
 
 		private void TrashFood()
 		{
-			if (_place.CurrentFood != null && _place.CurrentFood.GameObject != null)
-				Destroy(_place.CurrentFood.GameObject);
+			Food foodToTrash = _place.ExtractFood();
 
-			_place.FreePlace();
+			if ( foodToTrash != null && foodToTrash.GameObject != null )
+				Destroy(foodToTrash.GameObject);
 		}
 	}
 }
