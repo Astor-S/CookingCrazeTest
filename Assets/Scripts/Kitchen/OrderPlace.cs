@@ -1,79 +1,85 @@
-using UnityEngine;
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using UnityEngine;
 using CookingPrototype.Controllers;
 
-namespace CookingPrototype.Kitchen {
-	public sealed class OrderPlace : AbstractFoodPlace {
+namespace CookingPrototype.Kitchen
+{
+	public sealed class OrderPlace : AbstractFoodPlace
+	{
+		private readonly List<string> _curOrder = new List<string>();
+		private readonly List<Order> _possibleOrders = new List<Order>();
 
-		public List<FoodPlace> Places          = new List<FoodPlace>();
-		[HideInInspector]
-		public List<string>    CurOrder        = new List<string>();
-		public event Action    CurOrderUpdated;
+		[SerializeField] private List<FoodPlace> _places = new List<FoodPlace>();
 
-		List<Order>  _possibleOrders = new List<Order>();
+		public event Action CurOrderUpdated;
 
-		void Start() {
+		public List<string> CurOrder => _curOrder;
+
+		private void Start()
+		{
 			_possibleOrders.AddRange(OrdersController.Instance.Orders);
 		}
 
-		bool CanAddFood(Food food) {
-			if ( CurOrder.Contains(food.Name) ) {
+		public override bool TryPlaceFood(Food food)
+		{
+			if (CanAddFood(food) == false)
 				return false;
-			}
 
-			foreach ( var order in _possibleOrders ) {
-				foreach ( var orderFood in order.Foods.Where(x => x.Name == food.Name) ) {
-					if ( string.IsNullOrEmpty(orderFood.Needs) || CurOrder.Contains(orderFood.Needs) ) {
-						return true;
-					}
-				}
-			}
-			return false;
-		}
-
-		void UpdatePossibleOrders() {
-			var ordersToRemove = new List<Order>();
-			foreach ( var order in _possibleOrders ) {
-				if ( order.Foods.Where(x => x.Name == CurOrder[CurOrder.Count - 1]).Count() == 0 ) {
-					ordersToRemove.Add(order);
-				}
-			}
-			_possibleOrders.RemoveAll(x => ordersToRemove.Contains(x));
-		}
-
-		public override bool TryPlaceFood(Food food) {
-			if ( !CanAddFood(food) ) {
-				return false;
-			}
-
-			foreach ( var place in Places ) {
-				if ( !place.TryPlaceFood(food) ) {
+			foreach (FoodPlace place in _places)
+			{
+				if (place.TryPlaceFood(food) == false)
 					continue;
-				}
 
-				CurOrder.Add(food.Name);
+				_curOrder.Add(food.Name);
 				UpdatePossibleOrders();
 				CurOrderUpdated?.Invoke();
+
 				return true;
 			}
+
 			return false;
 		}
 
-		public override void FreePlace() {
+		public override void FreePlace()
+		{
 			_possibleOrders.Clear();
 			_possibleOrders.AddRange(OrdersController.Instance.Orders);
 
-			CurOrder.Clear();
+			_curOrder.Clear();
 
-			foreach ( var place in Places ) {
+			foreach (FoodPlace place in _places)
 				place.FreePlace();
-			}
 
 			CurOrderUpdated?.Invoke();
+		}
+
+		private bool CanAddFood(Food food)
+		{
+			if (_curOrder.Contains(food.Name))
+				return false;
+
+			foreach(Order order in _possibleOrders)
+				foreach (Order.OrderFood orderFood in order.Foods.Where(foodItem => foodItem.Name == food.Name))
+					if (string.IsNullOrEmpty(orderFood.Needs) || _curOrder.Contains(orderFood.Needs))
+						return true;
+
+			return false;
+		}
+
+		private void UpdatePossibleOrders()
+		{
+			List<Order> ordersToRemove = new List<Order>();
+
+			int shiftIndex = 1;
+			int lastFoodIndex = _curOrder.Count - shiftIndex;
+
+			foreach (Order order in _possibleOrders)
+				if (order.Foods.Where(foodItem => foodItem.Name == _curOrder[lastFoodIndex]).Count() == 0)
+					ordersToRemove.Add(order);
+
+			_possibleOrders.RemoveAll(possibleOrder => ordersToRemove.Contains(possibleOrder));
 		}
 	}
 }
