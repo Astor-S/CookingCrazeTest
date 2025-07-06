@@ -8,7 +8,7 @@ namespace CookingPrototype.Kitchen
 {
 	public sealed class Customer : MonoBehaviour
 	{
-		private const string ORDERS_PREFABS_PATH = "Prefabs/Orders/{0}";
+		private const string OrdersPreafbsPath = "Prefabs/Orders/{0}";
 
 		[SerializeField] private Image _customerImage;
 		[SerializeField] private List<Sprite> _customerSprites;
@@ -52,7 +52,7 @@ namespace CookingPrototype.Kitchen
 			{
 				Order order = _orders[i];
 				CustomerOrderPlace place = _orderPlaces[i];
-				Instantiate(Resources.Load<GameObject>(string.Format(ORDERS_PREFABS_PATH, order.Name)), place.transform, false);
+				Instantiate(Resources.Load<GameObject>(string.Format(OrdersPreafbsPath, order.Name)), place.transform, false);
 				place.Init(order);
 			}
 
