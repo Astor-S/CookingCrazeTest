@@ -1,26 +1,27 @@
 using System.Collections.Generic;
-
 using UnityEngine;
 
-namespace CookingPrototype.Kitchen {
-	public sealed class OrderVisualizer : MonoBehaviour {
-		public List<FoodVisualizer> Visualizers = new List<FoodVisualizer>();
+namespace CookingPrototype.Kitchen
+{
+	public sealed class OrderVisualizer : MonoBehaviour
+	{
+		[SerializeField] private List<FoodVisualizer> _visualizers = new List<FoodVisualizer>();
 
-		void Start() {
+		private void Start()
+		{
 			Clear();
 		}
 
-		void Clear() {
-			Visualizers.ForEach(x => x.SetEnabled(false));
+		public void Init(List<string> foods)
+		{
+			Clear();
+
+			foreach (FoodVisualizer visualizer in _visualizers)
+				if (foods.Contains(visualizer.Name))
+					visualizer.SetEnabled(true);
 		}
 
-		public void Init(List<string> foods) {
-			Clear();
-			foreach ( var vis in Visualizers ) {
-				if ( foods.Contains(vis.Name) ) {
-					vis.SetEnabled(true);
-				}
-			}
-		}
+		private void Clear() =>
+			_visualizers.ForEach(visualizer => visualizer.SetEnabled(false));
 	}
 }
