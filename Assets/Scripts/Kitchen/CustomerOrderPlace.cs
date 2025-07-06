@@ -4,19 +4,19 @@ namespace CookingPrototype.Kitchen
 {
 	public sealed class CustomerOrderPlace : MonoBehaviour
 	{
-		public Order CurOrder { get; private set; } = null;
+		public Order CurrentOrder { get; private set; } = null;
 
-		public bool IsActive => CurOrder != null;
+		public bool IsActive => CurrentOrder != null;
 
 		public void Init(Order order)
 		{
-			CurOrder = order;
+			CurrentOrder = order;
 			gameObject.SetActive(true);
 		}
 
 		public void Complete()
 		{
-			CurOrder = null;
+			CurrentOrder = null;
 			gameObject.SetActive(false);
 		}
 	}
