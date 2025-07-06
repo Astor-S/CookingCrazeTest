@@ -1,25 +1,27 @@
 using UnityEngine;
 
-namespace CookingPrototype.Kitchen {
+namespace CookingPrototype.Kitchen
+{
 	[RequireComponent(typeof(OrderPlace))]
-	public sealed class OrderPresenter : MonoBehaviour {
-		public OrderVisualizer Visualizer = null;
+	public sealed class OrderPresenter : MonoBehaviour
+	{
+		[SerializeField] private OrderVisualizer _visualizer;
 
-		OrderPlace _orderPlace = null;
+		private OrderPlace _orderPlace;
 
-		void Start() {
+		private void Start()
+		{
 			_orderPlace = GetComponent<OrderPlace>();
 			_orderPlace.CurOrderUpdated += OnOrderUpdated;
 		}
 
-		void OnDestroy() {
-			if ( _orderPlace ) {
+		private void OnDestroy()
+		{
+			if (_orderPlace)
 				_orderPlace.CurOrderUpdated -= OnOrderUpdated;
-			}
 		}
 
-		void OnOrderUpdated() {
-			Visualizer.Init(_orderPlace.CurOrder);
-		}
+		private void OnOrderUpdated() =>
+			_visualizer.Init(_orderPlace.CurOrder);
 	}
 }
