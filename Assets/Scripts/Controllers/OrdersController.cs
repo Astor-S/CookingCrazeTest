@@ -37,6 +37,7 @@ namespace CookingPrototype.Controllers
 
 			Instance = this;
 		}
+
 		private void Start()
 		{
 			Init();
