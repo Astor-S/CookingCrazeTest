@@ -1,15 +1,19 @@
 using System.Collections.Generic;
-
 using UnityEngine;
 
-namespace CookingPrototype.Kitchen {
-	public sealed class FoodVisualizer : MonoBehaviour {
-		public string           Name       = null;
-		public List<GameObject> AuxObjects = new List<GameObject>();
+namespace CookingPrototype.Kitchen
+{
+	public sealed class FoodVisualizer : MonoBehaviour
+	{
+		[SerializeField] private string _name;
+		[SerializeField] private List<GameObject> _auxObjects = new List<GameObject>();
 
-		public void SetEnabled(bool yesno) {
-			gameObject.SetActive(yesno);
-			AuxObjects.ForEach(x => x.SetActive(yesno));
+		public string Name => _name;
+
+		public void SetEnabled(bool enabled)
+		{
+			gameObject.SetActive(enabled);
+			_auxObjects.ForEach(auxObject => auxObject.SetActive(enabled));
 		}
 	}
 }
