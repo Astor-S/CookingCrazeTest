@@ -9,7 +9,7 @@ namespace CookingPrototype.Controllers
 {
 	public class CustomersController : MonoBehaviour
 	{
-		private const string CUSTOMER_PREFABS_PATH = "Prefabs/Customer";
+		private const string CustomerPrefabsPath = "Prefabs/Customer";
 
 		[SerializeField] private List<CustomerPlace> _customerPlaces = null;
 		[SerializeField] private int _customersTargetNumber = 15;
@@ -19,16 +19,16 @@ namespace CookingPrototype.Controllers
 		private Stack<List<Order>> _orderSets;
 		private float _timer = 0f;
 
+		public event Action TotalCustomersGeneratedChanged;
+
 		public static CustomersController Instance { get; private set; }
 
 		public int TotalCustomersGenerated { get; private set; } = 0;
 		public int CustomersTargetNumber => _customersTargetNumber;
 		public float CustomerWaitTime => _customerWaitTime;
 
-		public event Action TotalCustomersGeneratedChanged;
-
 		public bool IsComplete =>
-			TotalCustomersGenerated >= _customersTargetNumber && _customerPlaces.All(places => places.IsFree);
+			TotalCustomersGenerated >= _customersTargetNumber && _customerPlaces.All(place => place.IsFree);
 
 		private bool HasFreePlaces =>
 			_customerPlaces.Any(places => places.IsFree);
@@ -98,7 +98,7 @@ namespace CookingPrototype.Controllers
 
 		public void FreeCustomer(Customer customer)
 		{
-			CustomerPlace place = _customerPlaces.Find(places => places.CurrentCustomer == customer);
+			CustomerPlace place = _customerPlaces.Find(place => place.CurrentCustomer == customer);
 
 			if (place == null)
 				return;
@@ -111,7 +111,6 @@ namespace CookingPrototype.Controllers
 		{
 			Customer customerToServe = null;
 			float minWaitTime = float.MaxValue;
-
 			CustomerPlace placeToServe = null;
 
 			foreach (CustomerPlace place in _customerPlaces)
@@ -129,13 +128,10 @@ namespace CookingPrototype.Controllers
 
 			bool orderServed = customerToServe.ServeOrder(order);
 
-			if (orderServed && customerToServe.Orders.Count == 0) 
+			if (orderServed && customerToServe.IsComplete && placeToServe != null)
 			{
-				if (placeToServe != null)
-				{
-					placeToServe.Free();
-					GameplayController.Instance.CheckGameFinish();
-				}
+				placeToServe.Free();
+				GameplayController.Instance.CheckGameFinish();
 			}
 
 			return orderServed;
@@ -143,7 +139,7 @@ namespace CookingPrototype.Controllers
 
 		private void SpawnCustomer()
 		{
-			List<CustomerPlace> freePlaces = _customerPlaces.FindAll(places => places.IsFree);
+			List<CustomerPlace> freePlaces = _customerPlaces.FindAll(place => place.IsFree);
 
 			int minCount = 0;
 
@@ -158,7 +154,7 @@ namespace CookingPrototype.Controllers
 
 		private Customer GenerateCustomer()
 		{
-			GameObject customerGameObject = Instantiate(Resources.Load<GameObject>(CUSTOMER_PREFABS_PATH));
+			GameObject customerGameObject = Instantiate(Resources.Load<GameObject>(CustomerPrefabsPath));
 			Customer customer = customerGameObject.GetComponent<Customer>();
 
 			List<Order> orders = _orderSets.Pop();
