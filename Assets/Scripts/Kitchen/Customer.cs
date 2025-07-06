@@ -67,7 +67,7 @@ namespace CookingPrototype.Kitchen
 		{
 			const float minTimerValue = 0f;
 
-			CustomerOrderPlace place = _orderPlaces.Find(places => places.CurOrder == order);
+			CustomerOrderPlace place = _orderPlaces.Find(places => places.CurrentOrder == order && places.IsActive);
 
 			if (place == false)
 				return false;
